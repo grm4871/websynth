@@ -9,7 +9,7 @@ body {
     background: rgb(206, 187, 127);
 }
 heading {
-    background-color: white;
+    background-color: black;
     display:block;
 }
 .title {
@@ -26,7 +26,7 @@ ul li {
     padding-right: 15px;
 }
 h1, h2 {
-    margin: 0;
+    margin: 10;
 }
 button {
     background-color: grey;
@@ -129,6 +129,6 @@ a:link {
   
   /* visited link */
   a:visited {
-    color: lightgray;
+    color: darkgray;
   }
   

@@ -1,3 +1,5 @@
+// web synth author: Greg M
+
 var audio = new window.AudioContext();
 
 var SITE_VOLUME = .5;
@@ -157,12 +159,16 @@ document.getElementById("remosc").onclick = function() {
 
 
 var keys = ["q", "2", "w", "3", "e", "r", "5", "t", "6", "y", "7", "u", "i", "9", "o", "0", "p"];
-var i = 0;
 var keyValues = {};
-for(const key of keys) {
-    keyValues[key] = 262.0 * Math.pow(2, (i/TET));
-    i++;
+
+function setKeys() {
+    var i = 0;
+    for(const key of keys) {
+        keyValues[key] = 262.0 * Math.pow(2, (i/TET));
+        i++;
+    }
 }
+setKeys();
 
 window.addEventListener('keydown', function(event) {
     if (event.key in keyValues) {
@@ -172,11 +178,24 @@ window.addEventListener('keydown', function(event) {
 
 
 
-var slider = document.getElementById("volume");
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
+document.getElementById("volume").oninput = function() {
   SITE_VOLUME = this.value * .01;
-  console.log(SITE_VOLUME);
 }
 
+document.getElementById("tetplus").onclick = function() {
+    TET++;
+    document.getElementById("tet").innerHTML = "TET: " + String(TET);
+    setKeys();
+}
+
+document.getElementById("tetminus").onclick = function() {
+    TET--;
+    document.getElementById("tet").innerHTML = "TET: " + String(TET);
+    setKeys();
+}
+
+document.getElementById("tetreset").onclick = function() {
+    TET = 12;
+    document.getElementById("tet").innerHTML = "TET: " + String(TET);
+    setKeys();
+}
