@@ -1,5 +1,8 @@
 var audio = new window.AudioContext();
 
+var SITE_VOLUME = .5;
+var TET = 12; //tone equal temperament
+
 class OscModel {
     constructor(type, dest, frequency, attack, decay) {
         this.type = type;
@@ -21,7 +24,7 @@ function createOscillator(model, userfreq) {
 
     if (model.dest == "out") {
         gain.gain.setValueAtTime(0, audio.currentTime);
-        gain.gain.linearRampToValueAtTime(.15, audio.currentTime + attack / 1000);
+        gain.gain.linearRampToValueAtTime(.15 * SITE_VOLUME, audio.currentTime + attack / 1000);
         gain.gain.linearRampToValueAtTime(0, audio.currentTime + decay / 1000);
 
         gain.connect(audio.destination);
@@ -86,7 +89,7 @@ function createOscTemplate() {
     `<p>Oscillator Type:</p>
     <input type="radio" id="square${idx}" name="osc${idx}" value="square">
     <label for="square">Square</label><br>
-    <input type="radio" id="sine${idx}" name="osc${idx}" value="sine">
+    <input type="radio" id="sine${idx}" name="osc${idx}" value="sine" checked>
     <label for="sine">Sine</label><br>
     <input type="radio" id="triangle${idx}" name="osc${idx}" value="triangle">
     <label for="triangle">Triangle</label><br>
@@ -139,7 +142,6 @@ function createOscTemplate() {
 
     oscillators[idx] = [model, view]
 }
-
 document.getElementById("makeosc").onclick = function() {
     createOscTemplate();
 }
@@ -149,7 +151,6 @@ function deleteOsc() {
     div.parentNode.removeChild(div); //remove html
     oscillators.pop(); //remove object
 }
-
 document.getElementById("remosc").onclick = function() {
     deleteOsc();
 }
@@ -159,7 +160,7 @@ var keys = ["q", "2", "w", "3", "e", "r", "5", "t", "6", "y", "7", "u", "i", "9"
 var i = 0;
 var keyValues = {};
 for(const key of keys) {
-    keyValues[key] = 262.0 * Math.pow(2, (i/12));
+    keyValues[key] = 262.0 * Math.pow(2, (i/TET));
     i++;
 }
 
@@ -168,4 +169,14 @@ window.addEventListener('keydown', function(event) {
         createOscs(oscillators, keyValues[event.key]);
     };
 });
+
+
+
+var slider = document.getElementById("volume");
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  SITE_VOLUME = this.value * .01;
+  console.log(SITE_VOLUME);
+}
 
